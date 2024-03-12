@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+
+
+{% block content %}
+<div class="flex flex-col justify-center align-center items-center ">
+ <div class="bg-gray-900 w-full">
+  <div class="mx-auto max-w-7xl px-6 lg:px-8 ">
+    <div class="mx-auto max-w-2xl lg:max-w-none">
+      <dl class="grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4 py-12">
+        <div class="flex flex-col bg-white/5 p-8">
+          <dt class="text-xl font-semibold leading-6 text-gray-300">{{ d.os }}</dt>
+
+          <dd class="order-first text-3xl font-semibold tracking-tight text-white">OS</dd>
+
+        </div>
+
+        <div class="flex flex-col bg-white/5 p-8">
+          <dt class="text-sm font-semibold leading-6 text-gray-300">{{d.uuid}}</dt>
+          <dd class="order-first text-3xl font-semibold tracking-tight text-white">UUID</dd>
+        </div>
+        <div class="flex flex-col bg-white/5 p-8">
+            {% if api_status != 'stopped' and api_status != 'unknown' %} <dt class="text-xl font-semibold leading-6 text-green-600">{{api_status.upper()}}</dt> {% endif %}
+            {% if api_status == 'unknown' %} <dt class="text-xl font-semibold leading-6 text-orange-600">{{api_status.upper()}}</dt> {% endif %}
+            {% if api_status == 'stopped' %} <dt class="text-xl font-semibold leading-6 text-red-600">{{api_status.upper()}}</dt> {% endif %}
+
+          <dd class="order-first text-3xl font-semibold tracking-tight text-white">Status</dd>
+        </div>
+        <div class="flex flex-col bg-white/5 p-8">
+          <dt class="text-sm font-semibold leading-6 text-gray-300">
+
+               {% if api_status == 'stopped' or api_status == 'unknown' %} <dt class="text-xl font-semibold leading-6 text-red-600"> <div class="timer text-xl text-red-600">
+                <p>00:00</p>
+            </div></dt> {% endif %}
+
+            {% if api_status != 'stopped' and api_status != 'unknown' %} <dt class="text-xl font-semibold leading-6 text-green-600"> <div class="timer text-xl text-green-600">
+                <p id="time"></p>
+            </div></dt> {% endif %}
+
+
+
+          </dt>
+          <dd class="order-first text-3xl font-semibold tracking-tight text-white">Next Api Call</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</div>
+
+      {% block tabpanel %}
+        <span class="my-1 mt-6">
+             <a href="/manage-users" class="mx-12 text-blue-600 hover:text-blue-900  hover:border-blue-900 border border-blue-500 p-2">Manage Users</a>
+              {% if api_status != 'stopped' and api_status != 'unknown' %} <a href="/stop-start-api" class="mx-12 text-blue-600 hover:text-blue-900  hover:border-blue-900 border border-blue-500 p-2 ">Stop</a> {% endif %}
+              {% if api_status == 'stopped' %} <a href="/stop-start-api" class="mx-12 text-blue-600 hover:text-blue-900  hover:border-blue-900 border border-blue-500 p-2 ">Start</a> {% endif %}
+             <a href="/logout" class="mx-12 text-blue-600 hover:text-blue-900  hover:border-blue-900 border border-blue-500 p-2">Logout</a>
+        </span>
+    {% endblock %}
+
+
+
+    <div class="shadow border p-12 container my-6">
+  <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+    <img src="{{url_for('static', filename='logo-text.svg')}}" width="70%" class="text-center align-middle" alt="Your Company">
+    <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Configuration</h2>
+  </div>
+
+
+         <form class="space-y-6 w-full" action="/" method="POST">
+
+              <div>
+                <label for="os" class="block text-sm font-medium leading-6 text-gray-900">Operative System</label>
+                  <select id="os" name="os"  autocomplete="system" class="block w-full rounded-md border-0 py-1.5 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 px-3 py-2">
+                    {% for system in systems %}
+                        <option value={{ system }} {% if system == config.os %} selected {% endif %}>
+                            {{ system }}
+                        </option>
+                    {% endfor %}
+                  </select>
+            </div>
+
+              <div>
+                <label for="mode" class="block text-sm font-medium leading-6 text-gray-900">Mode</label>
+                  <select id="mode" name="mode"  autocomplete="mode" class="block w-full rounded-md border-0 py-1.5 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 px-3 py-2">
+                    {% for mode in modes %}
+                        <option value={{ mode }} {% if mode == config.mode %} selected {% endif %}>
+                            {{ mode }}
+                        </option>
+                    {% endfor %}
+                  </select>
+            </div>
+
+            <div>
+                <label for="serverUrl" class="block text-sm font-medium leading-6 text-gray-900">Server URL</label>
+                  <div class="relative mt-2 rounded-md shadow-sm">
+                    <input type="text"  name="serverUrl"  value={{ config.server }} id="serverUrl" class="block w-full rounded-md border-0 py-1.5 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 px-3" placeholder="000-00-0000">
+                  </div>
+            </div>
+
+               <div>
+                <label for="url_prefix" class="block text-sm font-medium leading-6 text-gray-900">Server URL Prefix (Route for API) [api-apps]</label>
+                  <div class="relative mt-2 rounded-md shadow-sm">
+                    <input type="text"  name="url_prefix"  value={{ config.url_prefix }} id="url_prefix" class="block w-full rounded-md border-0 py-1.5 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 px-3" placeholder="000-00-0000">
+                  </div>
+            </div>
+
+
+            <div>
+                <label for="database" class="block text-sm font-medium leading-6 text-gray-900">Database</label>
+                  <div class="relative mt-2 rounded-md shadow-sm">
+                    <input type="text" name="database"  value={{ config.database }} id="database" class="block w-full rounded-md border-0 py-1.5 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 px-3" placeholder="000-00-0000">
+                  </div>
+            </div>
+
+
+             <div>
+                <label for="auth_method" class="block text-sm font-medium leading-6 text-gray-900">Local API Authentication Method (For Configuration)</label>
+                  <select id="auth_method" name="auth_method" autocomplete="auth_method" class="block w-full rounded-md border-0 py-1.5 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 px-3 py-2">
+                    {% for auth_method in auth_methods %}
+                        <option value={{ auth_method }} {% if auth_method == config.auth_method %} selected {% endif %}>
+                            {{ auth_method }}
+                        </option>
+                    {% endfor %}
+                  </select>
+            </div>
+
+
+
+            <div>
+                <label for="token" class="block text-sm font-medium leading-6 text-gray-900">Auth Token</label>
+                  <div class="relative mt-2 rounded-md shadow-sm">
+                    <input type="password" name="token" value={{ config.token }} id="token" class="block w-full rounded-md border-0 py-1.5 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 px-3" placeholder="XAS654ASDARG">
+                  </div>
+            </div>
+
+      <div>
+            <button type="submit" class="flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Save Changes</button>
+      </div>
+
+
+
+
+        </form>
+    </div>
+    </div>
+
+</div>
+{% endblock %}
+
+
+
+

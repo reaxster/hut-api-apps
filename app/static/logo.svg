@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1000 1000">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#Degradado_sin_nombre_9-2);
+      }
+
+      .cls-2 {
+        fill: #438ecc;
+      }
+
+      .cls-3 {
+        fill: url(#Degradado_sin_nombre_9);
+      }
+    </style>
+    <linearGradient id="Degradado_sin_nombre_9" data-name="Degradado sin nombre 9" x1="1050" y1="550" x2="450" y2="-50" gradientUnits="userSpaceOnUse">
+      <stop offset=".5" stop-color="#2377bc"/>
+      <stop offset="1" stop-color="#2377bc" stop-opacity=".2"/>
+    </linearGradient>
+    <linearGradient id="Degradado_sin_nombre_9-2" data-name="Degradado sin nombre 9" x1="5721.2" y1="4373.19" x2="5121.2" y2="3773.19" gradientTransform="translate(5671.21 4823.19) rotate(-180)" xlink:href="#Degradado_sin_nombre_9"/>
+  </defs>
+  <g id="Capa_1-2" data-name="Capa 1">
+    <g>
+      <polygon class="cls-3" points="600 199.99 800 199.99 800 599.99 1000 599.99 1000 0 400 0 400 400 600 400 600 199.99"/>
+      <rect class="cls-2" x="400" width="200" height="400"/>
+      <polygon class="cls-1" points="400 800.01 200 800.01 200 400.01 0 400.01 0 1000 600 1000 600 600 400 600 400 800.01"/>
+      <rect class="cls-2" x="400" y="600" width="200" height="400" transform="translate(1000.01 1600) rotate(180)"/>
+    </g>
+  </g>
+</svg>

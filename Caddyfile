@@ -1,0 +1,3 @@
+http://ip-adress {
+    reverse_proxy localhost: 8000
+}
